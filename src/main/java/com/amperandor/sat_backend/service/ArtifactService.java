@@ -32,6 +32,14 @@ public class ArtifactService {
                 .doOnSuccess(data -> log.info("successfully saved in mongodb, document: {}", data.getId()));
     }
 
+    public File getFile(Artifact artifact) {
+        return fileService.getFile(artifact.getDirectory(), artifact.getFilename());
+    }
+    public Mono<Artifact> getArtifact(String artifactId) {
+        return artifactRepository.findById(artifactId);
+    }
+
+
 
 
 }

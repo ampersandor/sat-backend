@@ -31,5 +31,19 @@ public class ArtifactController {
                 .doOnError(error -> log.error("Something went wrong while uploading file", error))
                 .onErrorReturn(ResponseEntity.badRequest().build());
     }
-    
+
+    @GetMapping("/download/{fileId}")
+    public Mono<ResponseEntity<Resource>> downloadFile(@PathVariable String fileId, ServerHttpRequest request) {
+        return artifactService.getArtifact(fileId)
+                .map(artifactService::getFile)
+                .map(file -> {
+                    Resource resource = new FileSystemResource(file);
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"");
+                    headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
+
+                    return ResponseEntity.ok().headers(headers).body(resource);
+                });
+    }
+
 }
