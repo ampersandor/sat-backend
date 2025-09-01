@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-import javax.swing.plaf.synth.Region;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,11 +27,11 @@ public class FileService {
     private static final DateTimeFormatter DIR_FORMATTER = DateTimeFormatter.ofPattern("yyMMddHHmm");
 
     public Mono<ArtifactRequest> saveFile(FilePart filePart, Long fileSize, ArtifactType artifactType) {
-        final LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));;
-        final String directory = buildDirectory(now);
-        final String filename  = safeFilename(filePart.filename());
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));;
+        String directory = buildDirectory(now);
+        String filename  = safeFilename(filePart.filename());
 
-        final ArtifactRequest artifact = new ArtifactRequest(
+        ArtifactRequest artifact = new ArtifactRequest(
                 filename,
                 directory,
                 now,
@@ -40,9 +39,8 @@ public class FileService {
                 artifactType
         );
 
-        final Path base  = Paths.get(prefix);
-        final Path dir   = base.resolve(directory).normalize();
-        final Path dest  = dir.resolve(filename).normalize();
+        Path dir   = Paths.get(prefix).resolve(directory).normalize();
+        Path dest  = dir.resolve(filename).normalize();
 
         return createDirectory(dir)
                 .then(filePart.transferTo(dest))
