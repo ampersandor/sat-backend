@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: sat
+  data:
+    mongodb:
+      uri: mongodb+srv://sat:qwer@sat.4gmfwlp.mongodb.net/sat?retryWrites=true
+sat:
+  data:
+    prefix: /Users/ampersandor/data/sat/
