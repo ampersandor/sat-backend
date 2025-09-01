@@ -36,6 +36,7 @@ public class ArtifactService {
 
     public Mono<File> getFile(String artifactId) {
         return artifactRepository.findById(artifactId)
+                .switchIfEmpty(ApplicationExceptions.artifactsNotFound(artifactId))
                 .map(artifact -> fileService.getFile(artifact.getDirectory(), artifact.getFilename()));
     }
 

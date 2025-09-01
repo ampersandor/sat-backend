@@ -1,0 +1,9 @@
+package com.ampersandor.sat_backend.exceptions;
+
+import reactor.core.publisher.Mono;
+
+public class ApplicationExceptions {
+    public static <T> Mono<T> artifactsNotFound(String artifactId) {
+        return Mono.error(new ArtifactNotFoundException(artifactId));
+    }
+}

@@ -20,6 +20,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@Logging
 @RequestMapping("api/v1/sat")
 public class ArtifactController {
     private final ArtifactService artifactService;
@@ -48,7 +49,6 @@ public class ArtifactController {
                 });
     }
 
-    @Logging
     @GetMapping("/list/{artifactType}")
     public Flux<ArtifactDto> listFilesByType(@PathVariable ArtifactType artifactType) {
         return artifactService.getArtifactByType(artifactType);
