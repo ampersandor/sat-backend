@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.File;
@@ -32,11 +33,14 @@ public class ArtifactService {
                 .doOnSuccess(data -> log.info("successfully saved in mongodb, document: {}", data.getId()));
     }
 
-    public File getFile(Artifact artifact) {
-        return fileService.getFile(artifact.getDirectory(), artifact.getFilename());
+    public Mono<File> getFile(String artifactId) {
+        return artifactRepository.findById(artifactId)
+                .map(artifact -> fileService.getFile(artifact.getDirectory(), artifact.getFilename()));
     }
-    public Mono<Artifact> getArtifact(String artifactId) {
-        return artifactRepository.findById(artifactId);
+
+    public Flux<ArtifactDto> getArtifactByType(ArtifactType artifactType) {
+        return artifactRepository.findAllByType(artifactType)
+                .map(ArtifactMapper::toDto);
     }
 
 

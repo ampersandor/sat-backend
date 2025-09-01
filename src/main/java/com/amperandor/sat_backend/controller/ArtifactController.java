@@ -1,5 +1,6 @@
 package com.amperandor.sat_backend.controller;
 
+import com.amperandor.sat_backend.domain.ArtifactType;
 import com.amperandor.sat_backend.dto.ArtifactDto;
 import com.amperandor.sat_backend.service.ArtifactService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -32,10 +34,9 @@ public class ArtifactController {
                 .onErrorReturn(ResponseEntity.badRequest().build());
     }
 
-    @GetMapping("/download/{fileId}")
-    public Mono<ResponseEntity<Resource>> downloadFile(@PathVariable String fileId, ServerHttpRequest request) {
-        return artifactService.getArtifact(fileId)
-                .map(artifactService::getFile)
+    @GetMapping("/download/{artifactId}")
+    public Mono<ResponseEntity<Resource>> downloadFile(@PathVariable String artifactId, ServerHttpRequest request) {
+        return artifactService.getFile(artifactId)
                 .map(file -> {
                     Resource resource = new FileSystemResource(file);
                     HttpHeaders headers = new HttpHeaders();
@@ -44,6 +45,11 @@ public class ArtifactController {
 
                     return ResponseEntity.ok().headers(headers).body(resource);
                 });
+    }
+
+    @GetMapping("/list/{artifactType}")
+    public Flux<ArtifactDto> listFilesByType(@PathVariable ArtifactType artifactType) {
+        return artifactService.getArtifactByType(artifactType);
     }
 
 }

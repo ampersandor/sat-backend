@@ -35,7 +35,7 @@ public class FileService {
     public Mono<ArtifactRequest> saveFile(FilePart filePart, Long fileSize, ArtifactType artifactType) {
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));;
         String directory = buildDirectory(now);
-        String filename  = safeFilename(filePart.filename());
+        String filename = safeFilename(filePart.filename());
 
         ArtifactRequest artifact = new ArtifactRequest(
                 filename,
@@ -45,8 +45,8 @@ public class FileService {
                 artifactType
         );
 
-        Path dir   = Paths.get(prefix).resolve(directory).normalize();
-        Path dest  = dir.resolve(filename).normalize();
+        Path dir = Paths.get(prefix).resolve(directory).normalize();
+        Path dest = dir.resolve(filename).normalize();
 
         return createDirectory(dir)
                 .then(filePart.transferTo(dest))
