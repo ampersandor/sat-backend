@@ -1,8 +1,8 @@
-package com.amperandor.sat_backend.mapper;
+package com.ampersandor.sat_backend.mapper;
 
-import com.amperandor.sat_backend.dto.ArtifactDto;
-import com.amperandor.sat_backend.dto.ArtifactRequest;
-import com.amperandor.sat_backend.entity.Artifact;
+import com.ampersandor.sat_backend.dto.ArtifactDto;
+import com.ampersandor.sat_backend.dto.ArtifactRequest;
+import com.ampersandor.sat_backend.entity.Artifact;
 
 public class ArtifactMapper {
     public static Artifact toEntity(ArtifactRequest artifactRequest) {

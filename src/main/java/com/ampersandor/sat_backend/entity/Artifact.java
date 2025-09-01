@@ -1,6 +1,6 @@
-package com.amperandor.sat_backend.entity;
+package com.ampersandor.sat_backend.entity;
 
-import com.amperandor.sat_backend.domain.ArtifactType;
+import com.ampersandor.sat_backend.domain.ArtifactType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

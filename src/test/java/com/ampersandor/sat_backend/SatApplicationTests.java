@@ -1,4 +1,4 @@
-package com.amperandor.sat_backend;
+package com.ampersandor.sat_backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,7 +1,7 @@
-package com.amperandor.sat_backend.service;
+package com.ampersandor.sat_backend.service;
 
-import com.amperandor.sat_backend.domain.ArtifactType;
-import com.amperandor.sat_backend.dto.ArtifactRequest;
+import com.ampersandor.sat_backend.domain.ArtifactType;
+import com.ampersandor.sat_backend.dto.ArtifactRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.codec.multipart.FilePart;

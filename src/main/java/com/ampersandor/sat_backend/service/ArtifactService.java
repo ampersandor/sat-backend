@@ -1,10 +1,11 @@
-package com.amperandor.sat_backend.service;
+package com.ampersandor.sat_backend.service;
 
-import com.amperandor.sat_backend.domain.ArtifactType;
-import com.amperandor.sat_backend.dto.ArtifactDto;
-import com.amperandor.sat_backend.entity.Artifact;
-import com.amperandor.sat_backend.mapper.ArtifactMapper;
-import com.amperandor.sat_backend.repository.ArtifactRepository;
+import com.ampersandor.sat_backend.domain.ArtifactType;
+import com.ampersandor.sat_backend.dto.ArtifactDto;
+import com.ampersandor.sat_backend.entity.Artifact;
+import com.ampersandor.sat_backend.exceptions.ApplicationExceptions;
+import com.ampersandor.sat_backend.mapper.ArtifactMapper;
+import com.ampersandor.sat_backend.repository.ArtifactRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.codec.multipart.FilePart;

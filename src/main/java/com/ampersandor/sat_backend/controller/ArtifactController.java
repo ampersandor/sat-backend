@@ -1,8 +1,9 @@
-package com.amperandor.sat_backend.controller;
+package com.ampersandor.sat_backend.controller;
 
-import com.amperandor.sat_backend.domain.ArtifactType;
-import com.amperandor.sat_backend.dto.ArtifactDto;
-import com.amperandor.sat_backend.service.ArtifactService;
+import com.ampersandor.sat_backend.advice.Logging;
+import com.ampersandor.sat_backend.domain.ArtifactType;
+import com.ampersandor.sat_backend.dto.ArtifactDto;
+import com.ampersandor.sat_backend.service.ArtifactService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
@@ -47,6 +48,7 @@ public class ArtifactController {
                 });
     }
 
+    @Logging
     @GetMapping("/list/{artifactType}")
     public Flux<ArtifactDto> listFilesByType(@PathVariable ArtifactType artifactType) {
         return artifactService.getArtifactByType(artifactType);

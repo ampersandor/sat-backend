@@ -1,4 +1,4 @@
-package com.amperandor.sat_backend.domain;
+package com.ampersandor.sat_backend.domain;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

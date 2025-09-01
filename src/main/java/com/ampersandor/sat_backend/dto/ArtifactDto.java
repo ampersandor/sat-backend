@@ -1,10 +1,10 @@
-package com.amperandor.sat_backend.dto;
+package com.ampersandor.sat_backend.dto;
 
-import com.amperandor.sat_backend.domain.ArtifactType;
+import com.ampersandor.sat_backend.domain.ArtifactType;
 
 import java.time.LocalDateTime;
 
-public record ArtifactRequest (
+public record ArtifactDto(
    String filename,
    String directory,
    LocalDateTime createdAt,
