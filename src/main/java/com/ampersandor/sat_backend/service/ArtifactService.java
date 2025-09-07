@@ -35,9 +35,14 @@ public class ArtifactService {
     }
 
     public Mono<File> getFile(String artifactId) {
+        return getArtifact(artifactId)
+                .map(artifactDto -> fileService.getFile(artifactDto.directory(), artifactDto.filename()));
+    }
+
+    public Mono<ArtifactDto> getArtifact(String artifactId) {
         return artifactRepository.findById(artifactId)
                 .switchIfEmpty(ApplicationExceptions.artifactsNotFound(artifactId))
-                .map(artifact -> fileService.getFile(artifact.getDirectory(), artifact.getFilename()));
+                .map(ArtifactMapper::toDto);
     }
 
     public Flux<ArtifactDto> getArtifactByType(ArtifactType artifactType) {

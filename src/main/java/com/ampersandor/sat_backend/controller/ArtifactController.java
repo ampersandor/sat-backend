@@ -21,7 +21,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequiredArgsConstructor
 @Logging
-@RequestMapping("api/v1/sat")
+@RequestMapping("api/v1/artifact")
 public class ArtifactController {
     private final ArtifactService artifactService;
 

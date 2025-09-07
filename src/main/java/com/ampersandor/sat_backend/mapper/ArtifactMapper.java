@@ -17,6 +17,7 @@ public class ArtifactMapper {
 
     public static ArtifactDto toDto(Artifact artifact) {
         return new ArtifactDto(
+                artifact.getId(),
                 artifact.getFilename(),
                 artifact.getDirectory(),
                 artifact.getCreatedAt(),
