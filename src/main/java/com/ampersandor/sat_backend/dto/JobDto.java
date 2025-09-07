@@ -13,7 +13,8 @@ public class JobDto {
         String id;
         String taskId;
         String inputArtifactId;
-        String inputPath;
+        String baseName;
+        String dirName;
         Tool tool;
         String options;
         String createdAt;

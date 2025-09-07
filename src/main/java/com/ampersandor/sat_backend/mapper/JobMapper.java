@@ -17,7 +17,8 @@ public class JobMapper {
 
         return Job.builder()
                 .inputArtifactId(artifactDto.id())
-                .inputPath(artifactDto.directory() + "/" + artifactDto.filename())
+                .baseName(artifactDto.filename())
+                .dirName(artifactDto.directory())
                 .tool(jobRequest.tool())
                 .options(jobRequest.options())
                 .createdAt(now)

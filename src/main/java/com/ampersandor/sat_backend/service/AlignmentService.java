@@ -17,7 +17,7 @@ public class AlignmentService {
 
     public Mono<JobDto> submit(JobDto jobDto) {
         return alignmentServiceClient
-                .align(new AlignRequest(jobDto.getTool(), jobDto.getOptions(), jobDto.getInputPath()))
+                .align(new AlignRequest(jobDto.getTool(), jobDto.getOptions(), jobDto.getBaseName(), jobDto.getDirName()))
                 .map(response -> this.update(response, jobDto));
     }
 

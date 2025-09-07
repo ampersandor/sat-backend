@@ -24,8 +24,10 @@ public class Job {
     private String taskId;
     @Field("input_artifact_id")
     private String inputArtifactId;
-    @Field("input_path")
-    private String inputPath;
+    @Field("base_name")
+    private String baseName;
+    @Field("dir_name")
+    private String dirName;
     @Field("align_tool")
     private Tool tool;
     @Field("options")

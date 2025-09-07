@@ -6,5 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public record AlignRequest(
     @JsonProperty("align_tool") Tool tool,
     @JsonProperty("options") String options,
-    @JsonProperty("input_path") String inputPath
+    @JsonProperty("base_name") String baseName,
+    @JsonProperty("dir_name") String dirName
 ){}
