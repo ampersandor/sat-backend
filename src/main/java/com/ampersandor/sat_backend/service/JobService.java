@@ -3,6 +3,7 @@ package com.ampersandor.sat_backend.service;
 
 import com.ampersandor.sat_backend.dto.JobDto;
 import com.ampersandor.sat_backend.entity.Job;
+import com.ampersandor.sat_backend.exceptions.ApplicationExceptions;
 import com.ampersandor.sat_backend.mapper.JobMapper;
 import com.ampersandor.sat_backend.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,13 @@ public class JobService {
     public Mono<JobDto> saveJob(Job job) {
         return jobRepository.save(job).map(JobMapper::toDto);
     }
+
+    public Mono<JobDto> findJobByTaskId(String taskId) {
+        return jobRepository.findByTaskId(taskId)
+                .switchIfEmpty(ApplicationExceptions.jobNotFound(taskId))
+                .map(JobMapper::toDto);
+    }
+
 
 
 }

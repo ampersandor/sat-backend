@@ -6,4 +6,7 @@ public class ApplicationExceptions {
     public static <T> Mono<T> artifactsNotFound(String artifactId) {
         return Mono.error(new ArtifactNotFoundException(artifactId));
     }
+    public static <T> Mono<T> jobNotFound(String taskId) {
+        return Mono.error(new JobNotFoundException(taskId));
+    }
 }
