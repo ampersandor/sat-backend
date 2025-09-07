@@ -7,3 +7,14 @@ spring:
 sat:
   data:
     prefix: /Users/ampersandor/data/sat/
+  config:
+    import:
+      - "optional:configserver:http://localhost:8888"
+  cloud:
+    config:
+      fail-fast: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,refresh

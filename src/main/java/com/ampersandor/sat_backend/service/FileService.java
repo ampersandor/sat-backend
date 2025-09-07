@@ -4,6 +4,7 @@ import com.ampersandor.sat_backend.domain.ArtifactType;
 import com.ampersandor.sat_backend.dto.ArtifactRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
+@RefreshScope
 public class FileService {
 
     @Value("${sat.data.prefix}")
