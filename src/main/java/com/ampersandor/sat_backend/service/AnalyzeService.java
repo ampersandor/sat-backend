@@ -1,8 +1,10 @@
 package com.ampersandor.sat_backend.service;
 
 import com.ampersandor.sat_backend.advice.Logging;
+import com.ampersandor.sat_backend.domain.JobStatus;
 import com.ampersandor.sat_backend.dto.JobDto;
 import com.ampersandor.sat_backend.dto.JobRequest;
+import com.ampersandor.sat_backend.dto.JobUpdateRequest;
 import com.ampersandor.sat_backend.mapper.JobMapper;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,19 @@ public class AnalyzeService {
                 .flatMap(jobService::saveJob)
                 .flatMap(alignmentService::submit)
                 .map(JobMapper::toEntity)
+                .flatMap(jobService::saveJob);
+    }
+
+    public Mono<JobDto> updateJob(JobUpdateRequest request) {
+        if (request.status() == JobStatus.ERROR) {
+            return jobService.findJobByTaskId(request.taskId())
+                    .map(jobDto -> JobMapper.toEntity(jobDto, request))
+                    .flatMap(jobService::saveJob);
+        }
+
+        return jobService.findJobByTaskId(request.taskId())
+                .flatMap(jobDto -> artifactService.saveOutputFile(request.outputFile(), request.outputDir())
+                        .map(artifactDto -> JobMapper.toEntity(jobDto, request, artifactDto)))
                 .flatMap(jobService::saveJob);
     }
 

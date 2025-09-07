@@ -2,6 +2,7 @@ package com.ampersandor.sat_backend.service;
 
 import com.ampersandor.sat_backend.domain.ArtifactType;
 import com.ampersandor.sat_backend.dto.ArtifactDto;
+import com.ampersandor.sat_backend.dto.ArtifactRequest;
 import com.ampersandor.sat_backend.entity.Artifact;
 import com.ampersandor.sat_backend.exceptions.ApplicationExceptions;
 import com.ampersandor.sat_backend.mapper.ArtifactMapper;
@@ -14,6 +15,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Slf4j
 @Service
@@ -28,6 +31,17 @@ public class ArtifactService {
                 .flatMap(this::saveArtifact)
                 .map(ArtifactMapper::toDto);
     }
+
+    public Mono<ArtifactDto> saveOutputFile(String filename, String directory) {
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        ArtifactRequest request = new ArtifactRequest(filename, directory, now, 0L, ArtifactType.OUTPUT);
+
+        return artifactRepository
+                .save(ArtifactMapper.toEntity(request))
+                .flatMap(this::saveArtifact)
+                .map(ArtifactMapper::toDto);
+    }
+
     public Mono<Artifact> saveArtifact(Artifact artifact) {
         return artifactRepository.save(artifact)
                 .doOnError(error -> log.error("something went wrong in mongodb", error))
