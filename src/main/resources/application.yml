@@ -1,12 +1,6 @@
 spring:
   application:
     name: sat
-  data:
-    mongodb:
-      uri: mongodb+srv://sat:qwer@sat.4gmfwlp.mongodb.net/sat?retryWrites=true
-sat:
-  data:
-    prefix: /Users/ampersandor/data/sat/
   config:
     import:
       - "optional:configserver:http://localhost:8888"
@@ -18,3 +12,19 @@ management:
     web:
       exposure:
         include: health,info,metrics,refresh
+resilience4j:
+  circuitbreaker:
+    instances:
+      -align:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 20
+        failureRateThreshold: 50
+        slowCallDurationThreshold: 2s
+        slowCallRateThreshold: 50
+        minimumNumberOfCalls: 10
+        waitDurationInOpenState: 10s
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+  timelimiter:
+    instances:
+      align:
+        timeoutDuration: 3s
