@@ -8,12 +8,17 @@ import com.ampersandor.sat_backend.mapper.JobMapper;
 import com.ampersandor.sat_backend.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -34,10 +39,21 @@ public class JobService {
                 .map(JobMapper::toDto);
     }
 
-    public Sinks.Many<JobDto> getSink() {
-        return jobSink;
+    // TODO: should create ConcurrentHashMap to distinguish diverse sink
+    public Flux<JobDto> getUpdates() {
+        return jobSink.asFlux();
     }
 
 
+    public Mono<Page<JobDto>> getJobs(Pageable pageable) {
+        return Mono.zip(jobRepository.findBy(pageable).collectList(), jobRepository.count())
+                .map(tuple -> {
+                    List<JobDto> jobs = tuple.getT1().stream()
+                            .map(JobMapper::toDto)
+                            .collect(Collectors.toList());
+                    Long total = tuple.getT2();
+                    return new PageImpl<>(jobs, pageable, total);
+                });
+    }
 
 }

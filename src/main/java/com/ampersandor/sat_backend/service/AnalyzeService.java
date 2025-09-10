@@ -6,6 +6,7 @@ import com.ampersandor.sat_backend.dto.JobDto;
 import com.ampersandor.sat_backend.dto.JobRequest;
 import com.ampersandor.sat_backend.dto.JobUpdateRequest;
 import com.ampersandor.sat_backend.mapper.JobMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,10 +45,6 @@ public class AnalyzeService {
                 .flatMap(jobDto -> artifactService.saveOutputFile(request.outputFile(), request.outputDir())
                         .map(artifactDto -> JobMapper.toEntity(jobDto, request, artifactDto)))
                 .flatMap(jobService::saveJob);
-    }
-
-    public Flux<JobDto> streamJobs() {
-        return jobService.getSink().asFlux();
     }
 
 }
