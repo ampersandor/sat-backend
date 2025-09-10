@@ -9,7 +9,11 @@ import com.ampersandor.sat_backend.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.Sinks;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service
@@ -17,6 +21,8 @@ import reactor.core.publisher.Mono;
 public class JobService {
 
     private final JobRepository jobRepository;
+
+    private final Sinks.Many<JobDto> jobSink;
 
     public Mono<JobDto> saveJob(Job job) {
         return jobRepository.save(job).map(JobMapper::toDto);
@@ -26,6 +32,10 @@ public class JobService {
         return jobRepository.findByTaskId(taskId)
                 .switchIfEmpty(ApplicationExceptions.jobNotFound(taskId))
                 .map(JobMapper::toDto);
+    }
+
+    public Sinks.Many<JobDto> getSink() {
+        return jobSink;
     }
 
 

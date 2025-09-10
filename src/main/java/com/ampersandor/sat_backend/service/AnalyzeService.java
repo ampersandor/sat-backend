@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -43,6 +44,10 @@ public class AnalyzeService {
                 .flatMap(jobDto -> artifactService.saveOutputFile(request.outputFile(), request.outputDir())
                         .map(artifactDto -> JobMapper.toEntity(jobDto, request, artifactDto)))
                 .flatMap(jobService::saveJob);
+    }
+
+    public Flux<JobDto> streamJobs() {
+        return jobService.getSink().asFlux();
     }
 
 }
