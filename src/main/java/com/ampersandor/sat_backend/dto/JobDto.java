@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,8 +19,8 @@ public class JobDto {
         String dirName;
         Tool tool;
         String options;
-        String createdAt;
-        String updatedAt;
+        LocalDateTime createdAt;
+        LocalDateTime updatedAt;
         String outputArtifactId;
         JobStatus jobStatus;
         String message;
