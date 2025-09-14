@@ -1,10 +1,7 @@
 package com.ampersandor.sat_backend.mapper;
 
 import com.ampersandor.sat_backend.domain.JobStatus;
-import com.ampersandor.sat_backend.dto.JobDto;
-import com.ampersandor.sat_backend.dto.JobRequest;
-import com.ampersandor.sat_backend.dto.ArtifactDto;
-import com.ampersandor.sat_backend.dto.JobUpdateRequest;
+import com.ampersandor.sat_backend.dto.*;
 import com.ampersandor.sat_backend.entity.Job;
 import org.springframework.beans.BeanUtils;
 
@@ -52,15 +49,19 @@ public class JobMapper {
         return job;
     }
 
-    public static Job toEntity(JobDto jobDto, JobUpdateRequest jobUpdateRequest, ArtifactDto artifactDto) {
+    public static Job toEntity(JobDto jobDto, JobUpdateRequest jobUpdateRequest, ArtifactDto alignArtifactDto, ArtifactDto statArtifactDto) {
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         Job job = toEntity(jobDto);
-        job.setOutputArtifactId(artifactDto.id());
+        job.setAlignArtifactId(alignArtifactDto.id());
+        job.setStatArtifactId(statArtifactDto.id());
+        job.setStatistic(jobUpdateRequest.statistic());
         job.setJobStatus(jobUpdateRequest.status());
         job.setMessage(jobUpdateRequest.message());
         job.setUpdatedAt(now);
         return job;
     }
+
+
 
 
 }

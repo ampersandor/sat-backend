@@ -9,4 +9,7 @@ public class ApplicationExceptions {
     public static <T> Mono<T> jobNotFound(String taskId) {
         return Mono.error(new JobNotFoundException(taskId));
     }
+    public static <T> Mono<T> jobNotFoundByTaskId(String taskId) {
+        return Mono.error(new JobNotFoundByTaskIdException(taskId));
+    }
 }

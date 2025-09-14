@@ -36,8 +36,12 @@ public class Job {
     private LocalDateTime createdAt;
     @Field("updated_at")
     private LocalDateTime updatedAt;
-    @Field("output_artifact_id")
-    private String outputArtifactId;
+    @Field("align_artifact_id")
+    private String alignArtifactId;
+    @Field("stat_artifact_id")
+    private String statArtifactId;
+    @Field("statistic")
+    private Statistic statistic;
     @Field("align_job_status")
     private JobStatus jobStatus;
     @Field("message")

@@ -13,10 +13,12 @@ import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuples;
 
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -32,12 +34,17 @@ public class ArtifactService {
                 .map(ArtifactMapper::toDto);
     }
 
-    public Mono<ArtifactDto> saveOutputFile(String filename, String directory) {
+    public Mono<Map<ArtifactType, ArtifactDto>> saveOutputFiles(String alignFile, String statFile, String directory) {
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
-        ArtifactRequest request = new ArtifactRequest(filename, directory, now, 0L, ArtifactType.OUTPUT);
+        return Flux.just(Tuples.of(alignFile, ArtifactType.ALIGNED), Tuples.of(statFile, ArtifactType.STAT))
+                .map(tuple -> new ArtifactRequest(tuple.getT1(), directory, now, 0L, tuple.getT2()))
+                .flatMap(this::saveOutputFile)
+                .collectMap(ArtifactDto::artifactType);
+    }
 
+    public Mono<ArtifactDto> saveOutputFile(ArtifactRequest artifactRequest) {
         return artifactRepository
-                .save(ArtifactMapper.toEntity(request))
+                .save(ArtifactMapper.toEntity(artifactRequest))
                 .flatMap(this::saveArtifact)
                 .map(ArtifactMapper::toDto);
     }

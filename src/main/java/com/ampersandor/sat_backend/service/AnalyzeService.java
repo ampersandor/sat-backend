@@ -1,17 +1,16 @@
 package com.ampersandor.sat_backend.service;
 
 import com.ampersandor.sat_backend.advice.Logging;
+import com.ampersandor.sat_backend.domain.ArtifactType;
 import com.ampersandor.sat_backend.domain.JobStatus;
 import com.ampersandor.sat_backend.dto.JobDto;
 import com.ampersandor.sat_backend.dto.JobRequest;
 import com.ampersandor.sat_backend.dto.JobUpdateRequest;
 import com.ampersandor.sat_backend.mapper.JobMapper;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -42,8 +41,14 @@ public class AnalyzeService {
         }
 
         return jobService.findJobByTaskId(request.taskId())
-                .flatMap(jobDto -> artifactService.saveOutputFile(request.outputFile(), request.outputDir())
-                        .map(artifactDto -> JobMapper.toEntity(jobDto, request, artifactDto)))
+                .flatMap(jobDto ->
+                        artifactService.saveOutputFiles(request.alignFile(), request.statFile(), request.outputDir())
+                        .map(artifactDtoMap ->
+                                JobMapper.toEntity(
+                                        jobDto,
+                                        request,
+                                        artifactDtoMap.get(ArtifactType.ALIGNED),
+                                        artifactDtoMap.get(ArtifactType.STAT))))
                 .flatMap(jobService::saveJob);
     }
 
