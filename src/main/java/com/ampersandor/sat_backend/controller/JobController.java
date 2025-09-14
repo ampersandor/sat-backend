@@ -2,6 +2,7 @@ package com.ampersandor.sat_backend.controller;
 
 import com.ampersandor.sat_backend.advice.Logging;
 import com.ampersandor.sat_backend.dto.JobDto;
+import com.ampersandor.sat_backend.dto.StatisticDto;
 import com.ampersandor.sat_backend.service.JobService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

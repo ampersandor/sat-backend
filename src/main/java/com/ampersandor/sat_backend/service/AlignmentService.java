@@ -15,10 +15,8 @@ import reactor.core.publisher.Sinks;
 @RequiredArgsConstructor
 public class AlignmentService {
     private final AlignmentServiceClient alignmentServiceClient;
-    private final Sinks.Many<JobDto> jobSink;
 
     public Mono<JobDto> submit(JobDto jobDto) {
-        jobSink.tryEmitNext(jobDto);
         return alignmentServiceClient
                 .align(new AlignRequest(jobDto.getTool(), jobDto.getOptions(), jobDto.getBaseName(), jobDto.getDirName()))
                 .map(response -> this.update(response, jobDto));
@@ -27,7 +25,6 @@ public class AlignmentService {
     private JobDto update(AlignResponse response, JobDto jobDto) {
         jobDto.setTaskId(response.taskId());
         jobDto.setJobStatus(response.jobStatus());
-        jobSink.tryEmitNext(jobDto);
         return jobDto;
     }
 }
