@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.HashMap;
+import java.util.Map;
+
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -33,14 +37,30 @@ public class JobController {
                         .build());
     }
 
-    // TODO: accept sort options and parse it
     @GetMapping("")
     public Mono<Page<JobDto>> getJobs(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String inputArtifactId,
+            @RequestParam(required = false) String tool,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate) {
 
         PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        return jobService.getJobs(pageable);
+        Map<String, Object> filters = new HashMap<>();
+        if (inputArtifactId != null && !inputArtifactId.trim().isEmpty())
+            filters.put("inputArtifactId", inputArtifactId);
+        if (tool != null && !tool.trim().isEmpty())
+            filters.put("tool", tool);
+        if (status != null && !status.trim().isEmpty())
+            filters.put("status", status);
+        if (startDate != null && !startDate.trim().isEmpty())
+            filters.put("startDate", startDate);
+        if (endDate != null && !endDate.trim().isEmpty())
+            filters.put("endDate", endDate);
+
+        return jobService.getJobs(pageable, filters);
     }
 
     @GetMapping("/statistic/{jobId}")
@@ -50,5 +70,4 @@ public class JobController {
                 .doOnError(error -> log.error("statistic error", error))
                 .onErrorReturn(ResponseEntity.badRequest().build());
     }
-
 }

@@ -18,6 +18,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -45,8 +46,8 @@ public class JobService {
         return jobStream.stream();
     }
 
-    public Mono<Page<JobDto>> getJobs(Pageable pageable) {
-        return Mono.zip(jobRepository.findBy(pageable).collectList(), jobRepository.count())
+    public Mono<Page<JobDto>> getJobs(Pageable pageable, Map<String, Object> filters) {
+        return Mono.zip(jobRepository.findBy(pageable, filters).collectList(), jobRepository.count(filters))
                 .map(tuple -> {
                     List<JobDto> jobs = tuple.getT1().stream()
                             .map(JobMapper::toDto)
