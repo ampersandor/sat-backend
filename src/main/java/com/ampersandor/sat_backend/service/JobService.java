@@ -56,4 +56,10 @@ public class JobService {
                 });
     }
 
+    public Mono<StatisticDto> getStatistic(String jobId) {
+        return jobRepository.findById(jobId)
+                .switchIfEmpty(ApplicationExceptions.jobNotFound(jobId))
+                .map(job -> StatisticMapper.toDto(job.getStatistic()));
+    }
+
 }

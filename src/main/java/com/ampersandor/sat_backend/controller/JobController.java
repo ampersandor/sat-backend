@@ -9,11 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.ServerSentEvent;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -42,6 +40,14 @@ public class JobController {
 
         PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         return jobService.getJobs(pageable);
+    }
+
+    @GetMapping("/statistic/{jobId}")
+    public Mono<ResponseEntity<StatisticDto>> getStatistic(@PathVariable String jobId) {
+        return jobService.getStatistic(jobId)
+                .map(ResponseEntity::ok)
+                .doOnError(error -> log.error("statistic error", error))
+                .onErrorReturn(ResponseEntity.badRequest().build());
     }
 
 }
