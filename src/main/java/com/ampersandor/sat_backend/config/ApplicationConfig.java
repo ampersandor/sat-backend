@@ -12,6 +12,6 @@ public class ApplicationConfig {
 
     @Bean
     public Sinks.Many<JobDto> jobSink() {
-        return Sinks.many().multicast().onBackpressureBuffer();
+        return Sinks.many().replay().latest();
     }
 }
