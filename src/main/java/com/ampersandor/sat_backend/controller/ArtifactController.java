@@ -25,6 +25,13 @@ import reactor.core.publisher.Mono;
 public class ArtifactController {
     private final ArtifactService artifactService;
 
+    @DeleteMapping("/{artifactId}")
+    public Mono<ResponseEntity<Void>> deleteFile(@PathVariable String artifactId) {
+        return artifactService.deleteFile(artifactId)
+                .map(ResponseEntity::ok)
+                .onErrorReturn(ResponseEntity.badRequest().build());
+    }
+
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Mono<ResponseEntity<ArtifactDto>> uploadFile(@RequestPart("file") Mono<FilePart> filePartMono, ServerHttpRequest request) {
         return filePartMono.flatMap(filePart -> artifactService.saveInputFile(

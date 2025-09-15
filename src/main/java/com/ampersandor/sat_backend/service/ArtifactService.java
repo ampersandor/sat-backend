@@ -27,6 +27,16 @@ public class ArtifactService {
     private final ArtifactRepository artifactRepository;
     private final FileService fileService;
 
+   public Mono<Void> deleteFile(String artifactId) {
+       return artifactRepository.findById(artifactId)
+                .switchIfEmpty(ApplicationExceptions.artifactsNotFound(artifactId))
+                .flatMap(artifact -> {
+                    return fileService.deleteFile(artifact.getDirectory(), artifact.getFilename())
+                            .then(artifactRepository.delete(artifact));
+                });
+    }
+   
+
     public Mono<ArtifactDto> saveInputFile(FilePart filePart, Long fileSize) {
         return fileService.saveFile(filePart, fileSize, ArtifactType.INPUT)
                 .map(ArtifactMapper::toEntity)

@@ -34,6 +34,28 @@ public class FileService {
         return new File(filePath.toString());
 
     }
+
+    public Mono<Void> deleteFile(String directory, String filename) {
+        return Mono.fromRunnable(() -> {
+            try {
+                Path filePath = Paths.get(prefix).resolve(directory).resolve(filename);
+                Files.deleteIfExists(filePath);
+                log.info("Deleted file: " + directory + "/" + filename);
+                Path dirPath = Paths.get(prefix).resolve(directory);
+                if (Files.isDirectory(dirPath) && Files.list(dirPath).findAny().isEmpty()) {
+                    Files.deleteIfExists(dirPath);
+                    log.info("Deleted directory: " + directory);
+                }
+            } catch (Exception e) {
+                log.error("Failed to delete file: " + directory + "/" + filename, e);
+                throw new RuntimeException("Failed to delete file: " + directory + "/" + filename, e);
+            }
+        })
+        .subscribeOn(Schedulers.boundedElastic())
+        .then();
+
+    }
+
     public Mono<ArtifactRequest> saveFile(FilePart filePart, Long fileSize, ArtifactType artifactType) {
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));;
         String directory = buildDirectory(now);
