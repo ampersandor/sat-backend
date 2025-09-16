@@ -7,6 +7,9 @@ spring:
   cloud:
     config:
       fail-fast: true
+sat:
+  data:
+    prefix: ${DATA_DIR:/data/sat}
 management:
   endpoints:
     web:
