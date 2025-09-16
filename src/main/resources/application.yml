@@ -3,7 +3,7 @@ spring:
     name: sat
   config:
     import:
-      - "optional:configserver:http://localhost:8888"
+      - "optional:configserver:${SPRING_CLOUD_CONFIG_URI:http://localhost:8888}"
   cloud:
     config:
       fail-fast: true
